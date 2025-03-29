@@ -21,13 +21,8 @@ public class Subscription
         _maxGyms = GetMaxGyms();
     }
 
-    private Subscription()
-    {
-    }
-
     public Guid Id { get; private set; }
     public SubscriptionType SubscriptionType { get; } = null!;
-
     public Guid AdminId { get; }
 
 
@@ -88,5 +83,9 @@ public class Subscription
         _gymIds.Throw().IfNotContains(gymId);
 
         _gymIds.Remove(gymId);
+    }
+    
+    private Subscription()
+    {
     }
 }

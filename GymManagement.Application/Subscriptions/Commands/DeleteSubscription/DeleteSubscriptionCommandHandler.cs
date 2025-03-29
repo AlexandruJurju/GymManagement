@@ -7,7 +7,6 @@ namespace GymManagement.Application.Subscriptions.Commands.DeleteSubscription;
 public class DeleteSubscriptionCommandHandler : IRequestHandler<DeleteSubscriptionCommand, ErrorOr<Deleted>>
 {
     private readonly IAdminsRepository _adminsRepository;
-    private readonly IGymsRepository _gymsRepository;
     private readonly ISubscriptionsRepository _subscriptionsRepository;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -15,7 +14,6 @@ public class DeleteSubscriptionCommandHandler : IRequestHandler<DeleteSubscripti
     {
         _subscriptionsRepository = subscriptionsRepository;
         _unitOfWork = unitOfWork;
-        _gymsRepository = gymsRepository;
         _adminsRepository = adminsRepository;
     }
 
@@ -32,12 +30,8 @@ public class DeleteSubscriptionCommandHandler : IRequestHandler<DeleteSubscripti
             return Error.Unexpected(description: "Admin not found");
 
         admin.DeleteSubscription(command.SubscriptionId);
-
-        var gymsToDelete = await _gymsRepository.ListBySubscriptionIdAsync(command.SubscriptionId);
-
+        
         await _adminsRepository.UpdateAsync(admin);
-        await _subscriptionsRepository.RemoveSubscriptionAsync(subscription);
-        await _gymsRepository.RemoveRangeAsync(gymsToDelete);
         await _unitOfWork.CommitChangesAsync();
 
         return Result.Deleted;
