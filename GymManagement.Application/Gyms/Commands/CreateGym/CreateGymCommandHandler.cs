@@ -11,7 +11,7 @@ public class CreateGymCommandHandler : IRequestHandler<CreateGymCommand, ErrorOr
     private readonly ISubscriptionsRepository _subscriptionsRepository;
     private readonly IGymsRepository _gymsRepository;
     private readonly IUnitOfWork _unitOfWork;
-
+    
     public CreateGymCommandHandler(
         ISubscriptionsRepository subscriptionsRepository,
         IGymsRepository gymsRepository,
@@ -24,6 +24,17 @@ public class CreateGymCommandHandler : IRequestHandler<CreateGymCommand, ErrorOr
 
     public async Task<ErrorOr<Gym>> Handle(CreateGymCommand command, CancellationToken cancellationToken)
     {
+        var validator = new CreateGymCommandValidator();
+
+        var validationResult = await validator.ValidateAsync(command);
+
+        if (!validationResult.IsValid)
+        {
+            return validationResult.Errors
+                .Select(error => Error.Validation(code: error.PropertyName, description: error.ErrorMessage))
+                .ToList();
+        }
+
         var subscription = await _subscriptionsRepository.GetByIdAsync(command.SubscriptionId);
 
         if (subscription is null)
