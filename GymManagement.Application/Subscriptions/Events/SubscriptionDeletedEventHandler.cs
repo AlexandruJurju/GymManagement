@@ -17,10 +17,13 @@ public class SubscriptionDeletedEventHandler : INotificationHandler<Subscription
 
     public async Task Handle(SubscriptionDeletedEvent notification, CancellationToken cancellationToken)
     {
-        // todo: what happens when a domain event encounters an exception
-        var subscription = await _subscriptionsRepository.GetByIdAsync(notification.subscriptionId)
-                           ?? throw new InvalidOperationException($"Subscription with id: {notification.subscriptionId} not found");
+        var subscription = await _subscriptionsRepository.GetByIdAsync(notification.subscriptionId);
 
+        if (subscription is null)
+        {
+            throw new InvalidOperationException("Subscription not found");
+        }
+        
         await _subscriptionsRepository.RemoveSubscriptionAsync(subscription);
         await _unitOfWork.CommitChangesAsync();
     }
