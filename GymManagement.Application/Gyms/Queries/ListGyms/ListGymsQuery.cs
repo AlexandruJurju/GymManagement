@@ -1,6 +1,6 @@
 using ErrorOr;
-using MediatR;
 using GymManagement.Domain.Gyms;
+using MediatR;
 
 namespace GymManagement.Application.Gyms.Queries.ListGyms;
 

@@ -2,11 +2,6 @@
 
 public class Room
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = null!;
-    public Guid GymId { get; private set; }
-    public int MaxDailySessions { get; private set; }
-
     public Room(
         string name,
         Guid gymId,
@@ -22,4 +17,9 @@ public class Room
     private Room()
     {
     }
+
+    public Guid Id { get; private set; }
+    public string Name { get; private set; } = null!;
+    public Guid GymId { get; private set; }
+    public int MaxDailySessions { get; private set; }
 }

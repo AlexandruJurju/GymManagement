@@ -1,6 +1,5 @@
 using ErrorOr;
 using GymManagement.Application.Common.Interfaces;
-using GymManagement.Domain.Gyms;
 using MediatR;
 
 namespace GymManagement.Application.Gyms.Commands.AddTrainer;
@@ -20,7 +19,7 @@ public class AddTrainerCommandHandler : IRequestHandler<AddTrainerCommand, Error
 
     public async Task<ErrorOr<Success>> Handle(AddTrainerCommand command, CancellationToken cancellationToken)
     {
-        Gym? gym = await _gymsRepository.GetByIdAsync(command.GymId);
+        var gym = await _gymsRepository.GetByIdAsync(command.GymId);
 
         if (gym is null)
         {

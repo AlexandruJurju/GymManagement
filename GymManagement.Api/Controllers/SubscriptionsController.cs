@@ -79,7 +79,7 @@ public class SubscriptionsController : ApiController
             nameof(DomainSubscriptionType.Free) => SubscriptionType.Free,
             nameof(DomainSubscriptionType.Starter) => SubscriptionType.Starter,
             nameof(DomainSubscriptionType.Pro) => SubscriptionType.Pro,
-            _ => throw new InvalidOperationException(),
+            _ => throw new InvalidOperationException()
         };
     }
 }

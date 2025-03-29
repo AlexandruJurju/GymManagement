@@ -6,8 +6,8 @@ namespace GymManagement.Application.Gyms.Commands.DeleteGym;
 
 public class DeleteGymCommandHandler : IRequestHandler<DeleteGymCommand, ErrorOr<Deleted>>
 {
-    private readonly ISubscriptionsRepository _subscriptionsRepository;
     private readonly IGymsRepository _gymsRepository;
+    private readonly ISubscriptionsRepository _subscriptionsRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public DeleteGymCommandHandler(

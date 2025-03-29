@@ -8,10 +8,6 @@ public class Gym
 {
     private readonly int _maxRooms;
 
-    public Guid Id { get; }
-    public string Name { get; init; } = null!;
-    public Guid SubscriptionId { get; init; }
-
     private readonly List<Guid> _roomIds = new();
     private readonly List<Guid> _trainerIds = new();
 
@@ -26,6 +22,14 @@ public class Gym
         SubscriptionId = subscriptionId;
         Id = id ?? Guid.NewGuid();
     }
+
+    private Gym()
+    {
+    }
+
+    public Guid Id { get; }
+    public string Name { get; init; } = null!;
+    public Guid SubscriptionId { get; init; }
 
     public ErrorOr<Success> AddRoom(Room room)
     {
@@ -61,9 +65,5 @@ public class Gym
     public void RemoveRoom(Guid roomId)
     {
         _roomIds.Remove(roomId);
-    }
-
-    private Gym()
-    {
     }
 }

@@ -1,5 +1,4 @@
-﻿using ErrorOr;
-using GymManagement.Domain.Subscriptions;
+﻿using GymManagement.Domain.Subscriptions;
 
 namespace GymManagement.Application.Common.Interfaces;
 

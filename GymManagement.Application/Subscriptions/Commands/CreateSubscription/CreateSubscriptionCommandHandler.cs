@@ -20,8 +20,8 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
     {
         // Create a subscription
         var subscription = new Subscription(
-            subscriptionType: request.SubscriptionType,
-            adminId: request.AdminId
+            request.SubscriptionType,
+            request.AdminId
         );
 
         // Add it to the database

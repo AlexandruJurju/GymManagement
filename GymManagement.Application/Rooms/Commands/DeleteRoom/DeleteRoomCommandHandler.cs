@@ -1,7 +1,6 @@
 using ErrorOr;
 using GymManagement.Application.Common.Interfaces;
 using MediatR;
-using Throw;
 
 namespace GymManagement.Application.Rooms.Commands.DeleteRoom;
 
@@ -26,7 +25,7 @@ public class DeleteRoomCommandHandler : IRequestHandler<DeleteRoomCommand, Error
         {
             return Error.NotFound(description: "Gym not found");
         }
-        
+
         if (!gym.HasRoom(command.RoomId))
         {
             return Error.NotFound(description: "Room not found");

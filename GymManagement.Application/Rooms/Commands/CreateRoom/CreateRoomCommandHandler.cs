@@ -7,8 +7,8 @@ namespace GymManagement.Application.Rooms.Commands.CreateRoom;
 
 public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, ErrorOr<Room>>
 {
-    private readonly ISubscriptionsRepository _subscriptionsRepository;
     private readonly IGymsRepository _gymsRepository;
+    private readonly ISubscriptionsRepository _subscriptionsRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public CreateRoomCommandHandler(IUnitOfWork unitOfWork, IGymsRepository gymsRepository, ISubscriptionsRepository subscriptionsRepository)
@@ -29,14 +29,14 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Error
             return Error.Unexpected(description: "Subscription not found");
 
         var room = new Room(
-            name: request.RoomName,
-            gymId: request.GymId,
-            maxDailySessions: subscription.GetMaxDailySessions());
-        
+            request.RoomName,
+            request.GymId,
+            subscription.GetMaxDailySessions());
+
         var addRoomResult = gym.AddRoom(room);
-        if(addRoomResult.IsError)
+        if (addRoomResult.IsError)
             return addRoomResult.Errors;
-        
+
         // Note: the room itself isn't stored in our database, but rather
         // in the "SessionManagement" system that is not in scope of this course.
         await _gymsRepository.UpdateGymAsync(gym);

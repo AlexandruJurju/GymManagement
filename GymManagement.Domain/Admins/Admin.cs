@@ -5,10 +5,6 @@ namespace GymManagement.Domain.Admins;
 
 public class Admin
 {
-    public Guid Id { get; private set; }
-    public Guid UserId { get; private set; }
-    public Guid? SubscriptionId { get; private set; } = null;
-
     public Admin(
         Guid userId,
         Guid? subscriptionId = null,
@@ -22,6 +18,10 @@ public class Admin
     private Admin()
     {
     }
+
+    public Guid Id { get; private set; }
+    public Guid UserId { get; private set; }
+    public Guid? SubscriptionId { get; private set; }
 
     public void SetSubscription(Subscription subscription)
     {
