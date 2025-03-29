@@ -7,12 +7,12 @@ using GymManagement.Application.Gyms.Queries.ListGyms;
 using GymManagement.Contracts.Gyms;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GymManagement.Api.Controllers;
 
-[ApiController]
 [Route("subscriptions/{subscriptionId:guid}/gyms")]
-public class GymsController : ControllerBase
+public class GymsController : ApiController
 {
     private readonly ISender _mediator;
 
@@ -22,9 +22,8 @@ public class GymsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateGym(
-        CreateGymRequest request,
-        Guid subscriptionId)
+    [ProducesResponseType(200, Type = typeof(GymResponse))]
+    public async Task<IActionResult> CreateGym(CreateGymRequest request, Guid subscriptionId)
     {
         var command = new CreateGymCommand(request.Name, subscriptionId);
 
@@ -35,7 +34,7 @@ public class GymsController : ControllerBase
                 nameof(GetGym),
                 new { subscriptionId, GymId = gym.Id },
                 new GymResponse(gym.Id, gym.Name)),
-            _ => Problem());
+            Problem);
     }
 
     [HttpDelete("{gymId:guid}")]
@@ -47,7 +46,7 @@ public class GymsController : ControllerBase
 
         return deleteGymResult.Match<IActionResult>(
             _ => NoContent(),
-            _ => Problem());
+            Problem);
     }
 
     [HttpGet]
@@ -59,7 +58,7 @@ public class GymsController : ControllerBase
 
         return listGymsResult.Match(
             gyms => Ok(gyms.ConvertAll(gym => new GymResponse(gym.Id, gym.Name))),
-            _ => Problem());
+            Problem);
     }
 
     [HttpGet("{gymId:guid}")]
@@ -71,7 +70,7 @@ public class GymsController : ControllerBase
 
         return getGymResult.Match(
             gym => Ok(new GymResponse(gym.Id, gym.Name)),
-            _ => Problem());
+            Problem);
     }
 
     [HttpPost("{gymId:guid}/trainers")]
@@ -81,8 +80,8 @@ public class GymsController : ControllerBase
 
         var addTrainerResult = await _mediator.Send(command);
 
-        return addTrainerResult.MatchFirst<IActionResult>(
-            success => Ok(),
-            error => Problem());
+        return addTrainerResult.Match(
+            _ => Ok(),
+            Problem);
     }
 }
